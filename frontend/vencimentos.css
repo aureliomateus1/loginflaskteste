@@ -1,0 +1,774 @@
+/* =========================================================
+   TOKENS — mesma paleta "cadeia fria" do login, aplicada ao
+   painel. Cores de status (vencido/próximo/ok) são funcionais,
+   não decorativas: seguem literalmente as regras de negócio.
+   ========================================================= */
+:root {
+    --navy: #0B1220;
+    --navy-soft: #142238;
+    --bg: #F1F5F9;
+    --card: #FFFFFF;
+    --accent: #0891B2;
+    --accent-light: #22D3EE;
+    --ink: #0F172A;
+    --muted: #64748B;
+    --border: #E2E8F0;
+    --vencido: #DC2626;
+    --vencido-bg: #FEE2E2;
+    --proximo: #D97706;
+    --proximo-bg: #FEF3C7;
+    --ok: #16A34A;
+    --ok-bg: #DCFCE7;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+body {
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding-bottom: 40px;
+}
+
+/* ===== CABEÇALHO ===== */
+.v-header {
+    background:
+        radial-gradient(circle at 1px 1px, rgba(34, 211, 238, 0.15) 1px, transparent 0) 0 0 / 22px 22px,
+        linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+    padding: 32px 24px 28px;
+    margin-bottom: 24px;
+    text-align: center;
+    position: relative;
+    animation: v-fade-in 0.5s ease both;
+}
+
+.v-eyebrow {
+    display: block;
+    color: #5EEAD4;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: 'Space Grotesk', monospace;
+    margin-bottom: 10px;
+    opacity: 0.85;
+}
+
+.v-header h1 {
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.v-header h1 em {
+    color: var(--accent-light);
+    font-style: italic;
+}
+
+.v-status-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    color: #94A3B8;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.v-status-live i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ok);
+    display: inline-block;
+    animation: v-pulse 1.8s infinite;
+}
+
+/* ===== CARDS DE RESUMO ===== */
+.v-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 1100px;
+    margin: 0 auto 24px;
+    padding: 0 20px;
+}
+
+.v-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--muted);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.v-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px -12px rgba(15, 23, 42, 0.18);
+}
+
+.v-card-titulo {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.v-card-valor {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.v-card-vencidos { border-left-color: var(--vencido); }
+.v-card-vencidos .v-card-valor { color: var(--vencido); }
+
+.v-card-proximos { border-left-color: var(--proximo); }
+.v-card-proximos .v-card-valor { color: var(--proximo); }
+
+.v-card-total { border-left-color: var(--accent); }
+.v-card-total .v-card-valor { color: var(--accent); }
+
+/* ===== LAYOUT PRINCIPAL ===== */
+.v-main {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.v-painel-form, .v-painel-lista {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.v-painel-form h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--ink);
+    margin-bottom: 16px;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.v-painel-form input,
+.v-painel-form select {
+    width: 100%;
+    padding: 11px 12px;
+    margin-bottom: 10px;
+    background: #F8FAFC;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--ink);
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.v-painel-form input:focus,
+.v-painel-form select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
+}
+
+.v-erro {
+    color: var(--vencido);
+    font-size: 0.85rem;
+    min-height: 18px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.v-botoes-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.v-btn {
+    padding: 11px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background .15s, transform .1s;
+    font-size: 0.88rem;
+    font-family: inherit;
+}
+
+.v-btn:active {
+    transform: scale(0.98);
+}
+
+.v-btn-primario {
+    background: var(--accent);
+    color: #fff;
+}
+
+.v-btn-primario:hover {
+    background: var(--accent-light);
+}
+
+.v-btn-secundario {
+    background: #F1F5F9;
+    color: var(--ink);
+    border: 1px solid var(--border);
+}
+
+.v-btn-secundario:hover {
+    background: #E2E8F0;
+}
+
+/* ===== LISTA / TABELA ===== */
+.v-acoes-topo {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.v-acoes-topo input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 12px;
+    background: #F8FAFC;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--ink);
+    font-size: 0.9rem;
+    font-family: inherit;
+}
+
+.v-acoes-topo input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
+}
+
+.v-tabela-wrapper {
+    overflow-x: auto;
+    max-height: 600px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.v-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.v-tabela th {
+    background: #F8FAFC;
+    color: var(--muted);
+    padding: 12px 10px;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid var(--border);
+}
+
+.v-tabela td {
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--ink);
+}
+
+.v-tabela tbody tr:hover {
+    background: #F8FAFC;
+}
+
+.v-tabela tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Status como "pill" com indicador — funcional, segue as regras
+   de negócio (VENCIDO / PROXIMO / OK) em vez de decorar. */
+.status-VENCIDO, .status-PROXIMO, .status-OK {
+    font-weight: 600;
+    font-size: 0.78rem;
+}
+
+.status-VENCIDO::before, .status-PROXIMO::before, .status-OK::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.status-VENCIDO {
+    color: var(--vencido);
+}
+.status-VENCIDO::before {
+    background: var(--vencido);
+}
+
+.status-PROXIMO {
+    color: var(--proximo);
+}
+.status-PROXIMO::before {
+    background: var(--proximo);
+}
+
+.status-OK {
+    color: var(--ok);
+}
+.status-OK::before {
+    background: var(--ok);
+}
+
+.v-acao-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    margin-right: 6px;
+    color: var(--muted);
+    padding: 4px;
+    border-radius: 6px;
+    transition: background .15s;
+}
+
+.v-acao-btn:hover {
+    background: #F1F5F9;
+}
+
+.v-acao-btn.remover:hover {
+    background: var(--vencido-bg);
+}
+
+/* ===== MODAL (antes incompleto — agora estilizado por inteiro) ===== */
+.v-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(11, 18, 32, 0.55);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+}
+
+.v-modal {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 24px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px -20px rgba(11, 18, 32, 0.45);
+}
+
+.v-modal-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.v-modal-topo h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.v-modal-fechar {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--muted);
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background .15s;
+}
+
+.v-modal-fechar:hover {
+    background: #F1F5F9;
+    color: var(--ink);
+}
+
+.v-modal select {
+    width: 100%;
+    padding: 11px 12px;
+    margin-bottom: 16px;
+    background: #F8FAFC;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--ink);
+    font-size: 0.9rem;
+    font-family: inherit;
+}
+
+.v-modal select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
+}
+
+/* ===== ETIQUETA DE IMPRESSÃO (fora da tela, só usada no print) ===== */
+.v-etiqueta-print {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 900px) {
+    .v-main {
+        grid-template-columns: 1fr;
+    }
+
+    .v-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .v-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .v-card-valor {
+        font-size: 1.6rem;
+    }
+}
+
+/* =========================================================
+   DESTAQUES: Últimos Adicionados / Vencendo & Próximos / Gráfico
+   ========================================================= */
+.v-destaques {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.1fr;
+    gap: 16px;
+    max-width: 1400px;
+    margin: 0 auto 24px;
+    padding: 0 20px;
+}
+
+.v-destaque-col {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.v-destaque-col:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -12px rgba(15, 23, 42, 0.16);
+}
+
+.v-destaque-col h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 12px;
+}
+
+.v-mini-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.v-mini-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 6px;
+    border-bottom: 1px solid var(--border);
+}
+
+.v-mini-item:last-child {
+    border-bottom: none;
+}
+
+.v-mini-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.v-mini-dot.status-VENCIDO {
+    background: var(--vencido);
+    animation: v-pulse 1.6s infinite;
+}
+
+.v-mini-dot.status-PROXIMO {
+    background: var(--proximo);
+}
+
+.v-mini-dot.status-OK {
+    background: var(--ok);
+}
+
+.v-mini-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.v-mini-info strong {
+    font-size: 0.85rem;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.v-mini-info span {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.v-mini-data {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+}
+
+.v-mini-dias {
+    font-size: 0.75rem;
+    font-weight: 600;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.v-mini-vazio {
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding: 12px 4px;
+}
+
+.v-destaque-grafico {
+    display: flex;
+    flex-direction: column;
+}
+
+.v-grafico-wrap {
+    flex: 1;
+    min-height: 220px;
+    position: relative;
+}
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes v-fade-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes v-pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.35); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(220, 38, 38, 0); }
+}
+
+@media (max-width: 1100px) {
+    .v-destaques {
+        grid-template-columns: 1fr 1fr;
+    }
+    .v-destaque-grafico {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 700px) {
+    .v-destaques {
+        grid-template-columns: 1fr;
+    }
+    .v-destaque-grafico {
+        grid-column: auto;
+    }
+}
+
+/* =========================================================
+   ETIQUETA DE IMPRESSÃO — visível só na hora de imprimir.
+   Antes disso a página inteira era impressa por engano.
+   ========================================================= */
+.v-etiqueta {
+    width: 100mm;
+    height: 50mm;
+    box-sizing: border-box;
+    padding: 3mm 4mm;
+    font-family: 'Inter', Arial, sans-serif;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.v-etiqueta-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5mm;
+    padding-bottom: 1.5mm;
+    border-bottom: 0.4mm dashed #000;
+}
+
+.v-etiqueta-marca {
+    font-size: 2.4mm;
+    font-weight: 700;
+    letter-spacing: 0.3mm;
+    color: #000;
+    text-transform: uppercase;
+}
+
+.v-etiqueta-situacao {
+    font-size: 2.6mm;
+    font-weight: 700;
+    padding: 0.8mm 2mm;
+    border: 0.35mm solid #000;
+    border-radius: 1mm;
+    color: #000;
+    background: #fff;
+}
+
+/* Status vencido vem em destaque invertido (fundo preto) — o único
+   contraste forte que uma impressora térmica reproduz bem */
+.v-etiqueta-situacao.status-VENCIDO {
+    background: #000;
+    color: #fff;
+}
+
+.v-etiqueta h2 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: 5mm;
+    line-height: 1.15;
+    font-weight: 700;
+    margin: 0 0 1mm;
+    color: #000;
+    /* corta em 2 linhas no máximo pra não estourar a etiqueta */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.v-etiqueta-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5mm;
+    margin-bottom: 1.5mm;
+    font-size: 2.6mm;
+}
+
+.v-etiqueta-grid div {
+    display: flex;
+    gap: 1.2mm;
+}
+
+.v-etiqueta-grid span {
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 0.1mm;
+    font-weight: 600;
+}
+
+.v-etiqueta-grid span::after {
+    content: ':';
+}
+
+.v-etiqueta-grid strong {
+    font-size: 2.6mm;
+    color: #000;
+    font-weight: 400;
+}
+
+.v-etiqueta-validade {
+    border-top: 0.5mm solid #000;
+    padding-top: 1.2mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.v-etiqueta-validade span {
+    font-size: 2.4mm;
+    color: #000;
+    font-weight: 700;
+    letter-spacing: 0.2mm;
+}
+
+.v-etiqueta-validade strong {
+    font-size: 4mm;
+    color: #000;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+}
+
+@media screen {
+    .v-etiqueta-print {
+        position: absolute;
+        left: -9999px;
+        top: -9999px;
+    }
+}
+
+/* Isola só a etiqueta na impressão — antes a página inteira ia pra impressora */
+@media print {
+    @page {
+        size: 100mm 50mm;
+        margin: 0;
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+    .v-etiqueta-print, .v-etiqueta-print * {
+        visibility: visible;
+    }
+    .v-etiqueta-print {
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+    }
+}

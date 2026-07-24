@@ -1,0 +1,269 @@
+/* =========================================================
+   TOKENS — paleta "cadeia fria": navy frio + acento ciano.
+   Grounded no domínio (câmaras frias, freezers) em vez de um
+   tema genérico.
+   ========================================================= */
+:root {
+    --navy: #0B1220;
+    --navy-soft: #142238;
+    --bg: #F1F5F9;
+    --card: #FFFFFF;
+    --accent: #0891B2;
+    --accent-light: #22D3EE;
+    --ink: #0F172A;
+    --muted: #64748B;
+    --border: #E2E8F0;
+    --erro: #DC2626;
+    --sucesso: #16A34A;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    background: var(--bg);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+}
+
+.v-brand {
+    color: var(--navy);
+    font-family: 'Space Grotesk', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    opacity: 0.7;
+    animation: v-fade-in 0.5s ease both;
+}
+
+.auth-eyebrow {
+    display: block;
+    color: var(--accent);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-family: 'Space Grotesk', monospace;
+    margin-bottom: 10px;
+    opacity: 0.85;
+}
+
+@keyframes v-fade-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== CONTAINER PRINCIPAL ===== */
+.auth-container {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    min-height: 560px;
+    background: var(--card);
+    display: flex;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px -20px rgba(11, 18, 32, 0.35);
+    border: 1px solid var(--border);
+    animation: v-fade-in 0.6s ease both;
+}
+
+/* ===== LADOS (LOGIN / CADASTRO) ===== */
+.form-side {
+    width: 50%;
+    padding: 56px 48px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.form-side h2 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+    color: var(--ink);
+}
+
+.form-side h2 em {
+    color: var(--accent);
+    font-style: italic;
+}
+
+.form-side::after {
+    content: '';
+}
+
+.form-side input {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 13px 14px;
+    background: #F8FAFC;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--ink);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.form-side input::placeholder {
+    color: #94A3B8;
+}
+
+.form-side input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);
+}
+
+.form-side button {
+    background: var(--accent);
+    color: #fff;
+    padding: 13px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background .15s, transform .1s;
+    margin-top: 14px;
+}
+
+.form-side button:hover {
+    background: var(--accent-light);
+    box-shadow: 0 8px 20px -6px rgba(8, 145, 178, 0.5);
+}
+
+.form-side button:active {
+    transform: scale(0.98);
+}
+
+/* ===== ESTADO "ESCONDIDO" (lado inativo) ===== */
+.form-side.hidden-fields h2,
+.form-side.hidden-fields input,
+.form-side.hidden-fields button,
+.form-side.hidden-fields .auth-eyebrow {
+    display: none;
+}
+
+.form-side.hidden-fields::before {
+    content: attr(data-label);
+    color: #CBD5E1;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+/* ===== PAINEL NAVY DESLIZANTE (identidade "câmara fria") ===== */
+#slider-panel {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 1px 1px, rgba(34, 211, 238, 0.18) 1px, transparent 0) 0 0 / 22px 22px,
+        linear-gradient(155deg, var(--navy) 0%, var(--navy-soft) 100%);
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+#slider-panel h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0 0 8px;
+}
+
+#slider-panel p {
+    color: #94A3B8;
+    margin: 0 0 18px;
+    font-size: 0.95rem;
+}
+
+#slider-panel button {
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 24px;
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 4px;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background .15s;
+}
+
+#slider-panel button:hover {
+    background: var(--accent-light);
+    box-shadow: 0 8px 24px -6px rgba(34, 211, 238, 0.5);
+}
+
+/* Classe que move o painel para a esquerda (cobrindo o login) */
+.slide-left {
+    transform: translateX(-100%);
+}
+
+.mensagem-erro {
+    color: var(--erro);
+    font-size: 0.85rem;
+    min-height: 18px;
+    margin: 6px 0 0;
+    font-weight: 500;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 720px) {
+    .auth-container {
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .form-side {
+        width: 100%;
+        padding: 40px 28px;
+    }
+
+    #slider-panel {
+        position: relative;
+        left: 0;
+        width: 100%;
+        height: auto;
+        padding: 28px;
+        order: -1;
+    }
+
+    .slide-left {
+        transform: none;
+    }
+
+    /* Em telas pequenas o slider não desliza; ele funciona como
+       um bloco fixo no topo, então escondemos o lado inativo por
+       classe em vez de depender da animação de deslizar. */
+    .form-side.hidden-fields {
+        display: none;
+    }
+}
